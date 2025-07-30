@@ -5,6 +5,16 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [message, setMessage] = useState('')
+
+  console.log(message)
+
+  const callApi = () => {
+    fetch('http://localhost:3002/')
+      .then(response => response.json())
+      .then(json => setMessage(json.message))
+      .catch(error => console.error('Error:', error));
+  }
 
   return (
     <>
@@ -18,6 +28,10 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
+        <button onClick={callApi}>
+          Call Api
+        </button>
+        <p>{message}</p>
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>

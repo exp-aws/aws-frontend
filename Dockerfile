@@ -33,8 +33,8 @@ COPY --from=builder /app/dist .
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port 80
-EXPOSE 80
+# Expose ports
+EXPOSE 80 3002
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"] 
