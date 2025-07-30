@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  AWS_REGION: us-east-2  # Change this to your AWS region
+  AWS_REGION: us-east-2
   ECR_REPOSITORY: frontend
 
 jobs:
@@ -40,7 +40,6 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        # Build the Docker image with cache
         docker buildx build \
           --platform linux/amd64 \
           --cache-from type=gha \
@@ -49,7 +48,6 @@ jobs:
           --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest \
           --push \
           .
-        
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Output image URI
