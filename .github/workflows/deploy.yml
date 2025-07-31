@@ -11,6 +11,8 @@ on:
 env:
   AWS_REGION: us-east-2
   ECR_REPOSITORY: frontend
+  ECS_CLUSTER: ecs-cluster
+  ECS_SERVICE: frontend-service
 
 jobs:
   build-and-push:
