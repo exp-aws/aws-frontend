@@ -9,7 +9,8 @@ function App() {
 
   const backendApiUrl = import.meta.env.VITE_API_URL
 
-  console.log(backendApiUrl)
+  console.log('VITE_API_URL:', backendApiUrl)
+  console.log('Environment variables:', import.meta.env)
 
 
   const callApi = () => {
@@ -31,7 +32,10 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <p>Backend API: {backendApiUrl}</p>
+        <p>Backend API: {backendApiUrl || 'undefined'}</p>
+        {!backendApiUrl && (
+          <p style={{ color: 'red' }}>⚠️ VITE_API_URL is not set!</p>
+        )}
         <button onClick={callApi}>
           Call Api
         </button>
@@ -45,6 +49,7 @@ function App() {
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
+        Update version 1
       </p>
     </>
   )
