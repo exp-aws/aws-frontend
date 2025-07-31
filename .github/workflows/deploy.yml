@@ -64,8 +64,6 @@ jobs:
     - name: Output image URI
       run: echo "Image pushed to ${{ steps.build.outputs.image }}"
 
-          run: echo "Image pushed to ${{ steps.build.outputs.image }}"
-
     # Only deploy to ECS on main branch push (not on PR)
     - name: Deploy to ECS
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
