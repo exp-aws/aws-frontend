@@ -7,10 +7,13 @@ function App() {
   const [count, setCount] = useState(0)
   const [message, setMessage] = useState('')
 
-  console.log(message)
+  const backendApiUrl = import.meta.env.VITE_API_URL
+
+  console.log(backendApiUrl)
+
 
   const callApi = () => {
-    fetch('http://localhost:3002/')
+    fetch(`${backendApiUrl}/`)
       .then(response => response.json())
       .then(json => setMessage(json.message))
       .catch(error => console.error('Error:', error));
@@ -28,6 +31,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
+        <p>Backend API: {backendApiUrl}</p>
         <button onClick={callApi}>
           Call Api
         </button>
