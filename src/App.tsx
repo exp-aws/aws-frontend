@@ -49,7 +49,7 @@ function App() {
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
-        Update version 1
+        Update version 2 and let verify that ecs will pick new image
       </p>
     </>
   )
