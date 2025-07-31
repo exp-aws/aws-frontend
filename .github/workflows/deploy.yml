@@ -11,6 +11,8 @@ on:
 env:
   AWS_REGION: us-east-2
   ECR_REPOSITORY: frontend
+  ECS_CLUSTER: ecs-cluster
+  ECS_SERVICE: frontend-service
 
 jobs:
   build-and-push:
@@ -63,3 +65,38 @@ jobs:
 
     - name: Output image URI
       run: echo "Image pushed to ${{ steps.build.outputs.image }}"
+
+    # Only deploy to ECS on main branch push (not on PR)
+    - name: Deploy to ECS
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        echo "🔄 Forcing ECS service update to pull latest image..."
+        
+        # Force new deployment
+        aws ecs update-service \
+          --cluster $ECS_CLUSTER \
+          --service $ECS_SERVICE \
+          --force-new-deployment \
+          --region $AWS_REGION
+        
+        echo "✅ ECS service update initiated"
+        
+        # Wait for service to be stable
+        echo "⏳ Waiting for service to stabilize..."
+        aws ecs wait services-stable \
+          --cluster $ECS_CLUSTER \
+          --services $ECS_SERVICE \
+          --region $AWS_REGION
+        
+        echo "🎉 Frontend deployment completed successfully!"
+
+    - name: Get deployment status
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        echo "📊 Current ECS service status:"
+        aws ecs describe-services \
+          --cluster $ECS_CLUSTER \
+          --services $ECS_SERVICE \
+          --region $AWS_REGION \
+          --query 'services[0].{Status:status,RunningCount:runningCount,DesiredCount:desiredCount,UpdatedAt:updatedAt}' \
+          --output table 
